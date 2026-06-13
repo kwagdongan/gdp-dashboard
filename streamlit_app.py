@@ -36,7 +36,12 @@ with col2:
 st.markdown("---")
 st.subheader("🔍 전략적 분석 결과")
 
-st.write(df.explode(id).count())
+# 데이터 총 개수 계산 (행의 개수)
+total_rows = df.shape[0]
+
+# 화면에 표시
+st.metric(label="전체 데이터 개수", value=f"{total_rows:,} 개")
+
 st.write("""
 - **레드오션:** 그래프에서 가장 높게 나타나는 태그들은 게임 시장에서 이미 경쟁이 매우 치열합니다.
 - **틈새 전략:** 태그 빈도는 낮지만 평가가 좋은 태그 조합을 찾는 것이 전략적 핵심입니다.
