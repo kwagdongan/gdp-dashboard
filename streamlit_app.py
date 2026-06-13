@@ -12,7 +12,7 @@ st.title("메인 페이지")
 
 # 버튼을 누르면 'pages/01_레드오션_분석.py'로 이동
 if st.button("레드오션 분석 페이지로 이동"):
-    st.switch_page("pages/01_레드오션_분석.py")
+    st.switch_page("pages/01_page.py")
 
 # 버튼을 누르면 'pages/02_평점_분석.py'로 이동
 if st.button("평점 분석 페이지로 이동"):
