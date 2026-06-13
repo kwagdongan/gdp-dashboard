@@ -26,7 +26,7 @@ elif menu == "레드오션 분석":
     st.title("📊 레드오션 분석 (가장 많은 태그)")
     
     # 태그 분리 및 빈도 계산
-    tags = df['tags'].str.split(',').explode().str.strip()
+    tags = df['tags'].str.split('|').explode().str.strip()
     tag_counts = tags.value_counts().head(20).sort_values()
     
     st.bar_chart(tag_counts)
