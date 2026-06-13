@@ -27,8 +27,8 @@ elif menu == "레드오션 분석":
     
     # 태그 분리 및 빈도 계산
     tags = df['tags'].str.split('|').explode().str.strip()
-    tag_counts = tags.value_counts().head(20)
-    tag_counts = tag_counts.sort_values()
+    tag_counts = tags.value_counts().head(20).sort_values(by=tags.value_counts())
+
     
     st.bar_chart(tag_counts)
     st.write("이 태그들은 시장에서 가장 많이 사용되는 태그입니다.")
