@@ -1,28 +1,38 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Steam 분석 앱", layout="wide")
+# 1. 페이지 설정
+st.set_page_config(page_title="Steam 분석 대시보드", layout="wide")
 
-st.title("🎮 Steam 게임 태그 분석 대시보드")
-st.write("왼쪽 사이드바에서 분석 페이지를 선택하세요.")
-# 사이드바에 글자 하나만 띄워보기
-st.sidebar.title("테스트 사이드바")
-
-st.title("메인 페이지")
-
-# 버튼을 누르면 'pages/01_레드오션_분석.py'로 이동
-if st.button("레드오션 분석 페이지로 이동"):
-    st.switch_page("pages/01_page.py")
-
-# 버튼을 누르면 'pages/02_평점_분석.py'로 이동
-if st.button("평점 분석 페이지로 이동"):
-    st.switch_page("pages/02_평점_분석.py")
-
-
-
+# 2. 데이터 로드 (캐싱 사용)
 @st.cache_data
 def load_data():
+    # 파일 경로 문제 해결을 위해 단순화
     return pd.read_csv("datas.csv")
 
 df = load_data()
-st.metric("전체 데이터 개수", f"{df.shape[0]:,} 개")
+
+# 3. 사이드바 메뉴 구성
+st.sidebar.title("🎮 메뉴")
+menu = st.sidebar.radio("분석 페이지 선택", ["메인", "레드오션 분석", "평점 분석"])
+
+# 4. 페이지별 내용 분기
+if menu == "메인":
+    st.title("Steam 게임 데이터 분석 메인")
+    st.write("사이드바에서 분석 메뉴를 선택하세요.")
+    st.metric("전체 데이터 개수", f"{df.shape[0]:,} 개")
+
+elif menu == "레드오션 분석":
+    st.title("📊 레드오션 분석 (가장 많은 태그)")
+    
+    # 태그 분리 및 빈도 계산
+    tags = df['tags'].str.split(',').explode().str.strip()
+    tag_counts = tags.value_counts().head(10)
+    
+    st.bar_chart(tag_counts)
+    st.write("이 태그들은 시장에서 가장 많이 사용되는 태그입니다.")
+
+elif menu == "평점 분석":
+    st.title("⭐ 평점 분석")
+    st.write("평점 관련 데이터 분석을 수행하는 페이지입니다.")
+    # 예: st.line_chart(...)
