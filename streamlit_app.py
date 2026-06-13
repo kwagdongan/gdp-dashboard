@@ -1,45 +1,36 @@
 import streamlit as st
 import pandas as pd
-from collections import Counter
-import matplotlib.pyplot as plt
 
-st.title("Steam 게임 태그 분석")
+st.set_page_config(
+    page_title="Steam 태그 분석",
+    layout="wide"
+)
 
-df = pd.read_csv("datas.csv")
+@st.cache_data
+def load_data():
+    return pd.read_csv("datas.csv")
 
-    if "tags" not in df.columns:
-        st.error("'tags' 컬럼이 존재하지 않습니다.")
-    else:
-        # 태그 분리 및 카운트
-        tag_counter = Counter()
+df = load_data()
 
-        for tags in df["tags"].dropna():
-            tag_list = [tag.strip() for tag in str(tags).split("|")]
-            tag_counter.update(tag_list)
+st.title("🎮 Steam 게임 태그 분석")
 
-        # 데이터프레임 생성
-        tag_df = pd.DataFrame(
-            tag_counter.items(),
-            columns=["Tag", "Count"]
-        ).sort_values(
-            by="Count",
-            ascending=False
-        )
+st.markdown("""
+### 분석 내용
 
-        st.subheader("태그 빈도 순위")
-        st.dataframe(tag_df)
+- 가장 많이 사용되는 태그 (레드오션)
+- 가장 평가가 좋은 태그
+- 가장 평가가 나쁜 태그
 
-        # Top 20 시각화
-        top_n = 20
-        top_tags = tag_df.head(top_n)
+왼쪽 메뉴에서 원하는 분석을 선택하세요.
+""")
 
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.barh(
-            top_tags["Tag"][::-1],
-            top_tags["Count"][::-1]
-        )
+col1, col2 = st.columns(2)
 
-        ax.set_title(f"Top {top_n} Tags")
-        ax.set_xlabel("Count")
+with col1:
+    st.metric("게임 수", len(df))
 
-        st.pyplot(fig)
+with col2:
+    st.metric("컬럼 수", len(df.columns))
+
+st.subheader("데이터 미리보기")
+st.dataframe(df.head())
