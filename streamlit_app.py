@@ -9,7 +9,7 @@ st.title("🎮 Steam 게임 태그 연관 규칙 분석")
 # 2. 데이터 불러오기
 @st.cache_data
 def load_data():
-    df = pd.read_csv("dataset.csv")
+    df = pd.read_csv("datas.csv")
     # 태그를 콤마(,) 기준으로 분리하여 리스트로 변환
     df['tags'] = df['tags'].str.split(',')
     return df
